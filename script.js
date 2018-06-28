@@ -1,3 +1,57 @@
+var dbPromise = idb.open('test-db', 3, function(upgradeDb) {
+  switch(upgradeDb.oldVersion) {
+    case 0:
+      upgradeDb.createObjectStore('currencies', { keyPath: 'id' });
+      //keyValStore.put("world", "hello");
+    case 1:
+      var currencyStore = upgradeDb.transaction.objectStore('currencies');
+      currencyStore.createIndex('currency', 'currencyName');
+    case 2:
+      var currencyStore = upgradeDb.transaction.objectStore('currencies');
+     currencyStore.createIndex('currencySymbol', 'currencySymbol');
+    
+  }
+});
+
+dbPromise.then(function(db) {
+  var tx = db.transaction('currencies', 'readwrite');
+  var currencyStore = tx.objectStore('currencies');
+
+  currencyStore.put({
+    id: 'XCD',
+    currencyName: 'East Caribbean Dollar',
+    currencySymbol:  "$"
+  });
+
+  currencyStore.put({
+    id: 'ALL',
+    currencyName: 'Albanian Lek',
+    currencySymbol:  "Lek"
+  });
+
+  currencyStore.put({
+     id: 'Euro',
+    country: 'EURO',
+    currencySymbol:  "€"
+  });
+
+  return tx.complete;
+}).then(function() {
+  console.log('Currencies added');
+});
+
+dbPromise.then(function(db) {
+  var tx = db.transaction('currencies');
+  var currencyStore = tx.objectStore('currencies');
+  var currencyIndex = currencyStore.index('currencySymbol');
+
+  return currencyIndex.getAll();
+}).then(function(currency) {
+  console.log('Currency by symbol:', currency);
+});
+
+
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('/sw.js')
