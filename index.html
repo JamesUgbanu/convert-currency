@@ -1,0 +1,90 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Welcome to Glitch!</title>
+    <meta name="description" content="A cool thing made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+    <body onload="convertCurrency();">
+<div class="container-fluid">
+  <div class="col-md-6 col-md-offset-3 box">
+  <header class="row">
+    <h1 class="col-xs-12 text-center">CURRENCY CONVERTER</h1>
+  </header>
+  
+  <section class="col-centered">
+  <div class="row">
+     <label class="col-md-2 col-sm-2 col-md-offset-1 control-label">From:</label>
+   <div class="col-md-3 col-sm-3">
+     <div class="input-group">
+  <span class="input-group-addon" id="fromSymbol"></span>
+      <input id="fromAmount" type="text" class="form-control" onkeyup="convertCurrency();" value="1">
+    </div>
+    </div>
+        <div class="col-sm-4 col-sm-4">
+        <select class="form-control currency" id="from" onchange="convertCurrency();">
+           <option value="USD">US Dollar(USD)</option>
+           <option value="NGN">Nigerian Naira(NGN)</option>
+        </select>  
+        </div>
+</div> <br>    
+  <div class="row">
+     <label class="col-md-2 col-md-offset-1 control-label">To:</label>
+   <div class="col-md-3">
+     <div class="input-group">
+  <span class="input-group-addon" id="toSymbol"></span>
+      <input id="toAmount" type="text" class="form-control" aria-label="..." disabled>
+    </div>
+    </div>
+        <div class="col-sm-4">
+        <select class="form-control currency" id="to" onchange="convertCurrency();">
+          <option value="NGN">Nigerian Naira(NGN)</option>
+          <option value="USD">US Dollar(USD)</option>
+        </select>             
+        </div>
+</div>    
+    
+    </section>
+     </div>
+  <footer class="row">
+    <p class="col-xs-12 text-center">Copyright © James 2018</p>
+  </footer>
+</div>
+
+<!--         <div class="form-group">
+          <label class="sr-only" for="exampleInputAmount">Amount I Want</label>
+          <div class="input-group">
+            <select id="rate-symbols" class="form-control"></select> 
+            <input type="text" class="form-control" id="outputAmount" placeholder="Conversion Amount">
+          </div>
+        </div> -->
+<!--         <button type="submit" class="btn btn-primary">Transfer cash</button> -->
+ 
+    <!-- import the webpage's client-side javascript file -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/script.js" async></script>
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+    <script type="text/javascript" src="https://button.glitch.me/button.js"></script>
+
+  </body>
+</html>
