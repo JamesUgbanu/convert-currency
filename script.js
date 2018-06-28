@@ -1,54 +1,50 @@
-var dbPromise = idb.open('test-db', 3, function(upgradeDb) {
-  switch(upgradeDb.oldVersion) {
-    case 0:
-      upgradeDb.createObjectStore('currencies', { keyPath: 'id' });
-      //keyValStore.put("world", "hello");
-    case 1:
-      var currencyStore = upgradeDb.transaction.objectStore('currencies');
-      currencyStore.createIndex('currency', 'currencyName');
-    case 2:
-      var currencyStore = upgradeDb.transaction.objectStore('currencies');
-     currencyStore.createIndex('currencySymbol', 'currencySymbol');
-    
-  }
-});
 
-dbPromise.then(function(db) {
-  var tx = db.transaction('currencies', 'readwrite');
-  var currencyStore = tx.objectStore('currencies');
-
-  currencyStore.put({
-    id: 'XCD',
-    currencyName: 'East Caribbean Dollar',
-    currencySymbol:  "$"
+ var dbPromise = idb.open('currencyConverter', 1, function(upgradeDb) {
+    var store = upgradeDb.createObjectStore('currencies', {
+      keyPath: 'id'
+    });
+    store.createIndex('by-date', 'time');
   });
 
-  currencyStore.put({
-    id: 'ALL',
-    currencyName: 'Albanian Lek',
-    currencySymbol:  "Lek"
-  });
+        
+     
 
-  currencyStore.put({
-     id: 'Euro',
-    country: 'EURO',
-    currencySymbol:  "€"
-  });
+// dbPromise.then(function(db) {
+//   var tx = db.transaction('currencies', 'readwrite');
+//   var currencyStore = tx.objectStore('currencies');
 
-  return tx.complete;
-}).then(function() {
-  console.log('Currencies added');
-});
+//   currencyStore.put({
+//     id: 'XCD',
+//     currencyName: 'East Caribbean Dollar',
+//     currencySymbol:  "$"
+//   });
 
-dbPromise.then(function(db) {
-  var tx = db.transaction('currencies');
-  var currencyStore = tx.objectStore('currencies');
-  var currencyIndex = currencyStore.index('currencySymbol');
+//   currencyStore.put({
+//     id: 'ALL',
+//     currencyName: 'Albanian Lek',
+//     currencySymbol:  "Lek"
+//   });
 
-  return currencyIndex.getAll();
-}).then(function(currency) {
-  console.log('Currency by symbol:', currency);
-});
+//   currencyStore.put({
+//      id: 'Euro',
+//     country: 'EURO',
+//     currencySymbol:  "€"
+//   });
+
+//   return tx.complete;
+// }).then(function() {
+//   console.log('Currencies added');
+// });
+
+// dbPromise.then(function(db) {
+//   var tx = db.transaction('currencies');
+//   var currencyStore = tx.objectStore('currencies');
+//   var currencyIndex = currencyStore.index('currencySymbol');
+
+//   return currencyIndex.getAll();
+// }).then(function(currency) {
+//   console.log('Currency by symbol:', currency);
+// });
 
 
 
@@ -131,14 +127,20 @@ function convertCurrency() {
               url: currenciesUrl,
               type:"GET",
               success: (results) => {
-                result = results.results;
+               var result = results.results;
                 // let sorted = result.sort(function (a, b) {
                 //       return a["currencyName"] - b["currencyName"];
                 //     });
-                //console.log(results);
-               for (const props in result) {
+                //console.log(result);
+                dbPromise.then(function(db) {
+               var tx = db.transaction('currencies', 'readwrite');
+               var store = tx.objectStore('currencies');
+                  
+                  for (const props in result) {
+        
+                      store.put(result[props]);
                 
-                 // let sorted = result.sort(function (a, b) {
+                // let sorted = result.sort(function (a, b) {
                  //      return a[props]["currencyName"] - b[props]["currencyName"];
                  //    });
                  
@@ -155,6 +157,10 @@ function convertCurrency() {
               
                  $(".currency").append(html);
                 }
+                
+              });
+                  
+               
                 
               },
               error: (xhr,status,error) => {console.log(status)}, 
