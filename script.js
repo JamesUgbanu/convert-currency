@@ -1,9 +1,10 @@
 
  var dbPromise = idb.open('currencyConverter', 1, function(upgradeDb) {
-    var store = upgradeDb.createObjectStore('currencies', {
+     upgradeDb.createObjectStore('currencies', {
       keyPath: 'id'
     });
-    store.createIndex('by-date', 'time');
+   var exchangeRate = upgradeDb.createObjectStore('rate');
+   //exchangeRate.createIndex('from-to', 'query');
   });
 
         
@@ -144,26 +145,12 @@ function convertCurrency() {
                  //      return a[props]["currencyName"] - b[props]["currencyName"];
                  //    });
                  
-              let html = `<option value="${props}">${result[props]["currencyName"]}(${props})</option>`;
-            
-              if(fromCurrency === props) {
-                
-                $("#fromSymbol").html(result[props]["currencySymbol"]);
-               
-                  } else if(toCurrency === props) {
-                    
-                       $("#toSymbol").html(result[props]["currencySymbol"]);
-                  }
-              
-                 $(".currency").append(html);
                 }
                 
               });
-                  
-               
                 
-              },
-              error: (xhr,status,error) => {console.log(status)}, 
+              //},error: (xhr,status,error) => {console.log(status)
+              }, 
               dataType: 'jsonp',
         });  
   
@@ -176,20 +163,57 @@ function convertCurrency() {
               type:"GET",
               success: (data) => {
                let val = data[query];
-                  if (val) {
-              let total = val * fromAmount;
-              let toAmount = Math.round(total * 100) / 100;
-                 $('#toAmount').val(toAmount);
-                    
-              } else {
-                var err = new Error("Value not found for " + query);
-              
-            }
-              },
-              error: function(xhr,status,error) {
-                console.log(status);
+                 dbPromise.then(function(db) {
+               var tx = db.transaction('rate', 'readwrite');
+               var store = tx.objectStore('rate');
+                   store.put("hello", "world");
+                console.log(data)
+                 })
+              //},  error: function(xhr,status,error) {
+               
               }, dataType: 'jsonp',
         });  
-       return result;
+      
+          dbPromise.then(function(db) {
+               var tx = db.transaction('currencies');
+               var getCurrency = tx.objectStore('currencies');
+                  getCurrency.getAll().then(function(currencies) {
+                    var sortedCurrencies = currencies.filter(currency => {
+                              return  currency.id !== "USD" && currency.id !== "NGN";
+                    }).
+                    sort(function (a, b) {
+                     // console.log(a.currencyName)
+                      return a.currencyName.localeCompare(b.currencyName);
+                    });
+     
+                      sortedCurrencies.forEach(currency => {
+                        //var selected = currency.id == "USD" ? selected="selected": "";
+                      let html = `<option value="${currency.id}">${currency.currencyName}(${currency.id})</option>`;
+
+                    if(fromCurrency === currency.id) {
+
+                      currency.hasOwnProperty("currencySymbol") ? $("#fromSymbol").html(currency.currencySymbol) : $("#fromSymbol").html("");
+
+                        } else if(toCurrency === currency.id) {
+
+                         $("#toSymbol").html(currency.currencySymbol);
+                        }
+
+                       $(".currency").append(html); 
+                      })
+                  }) 
+          });
+  
+  
+//               if (val) {
+//               let total = val * fromAmount;
+//               let toAmount = Math.round(total * 100) / 100;
+//                  $('#toAmount').val(toAmount);
+                    
+//               } else {
+//                 var err = new Error("Value not found for " + query);
+              
+//             }
+          
 }
 

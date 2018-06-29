@@ -1,4 +1,4 @@
-var staticCacheName = 'curren-static-v3';
+var staticCacheName = 'curren-static-v2';
 var contentImgsCache = 'curren-content-imgs';
 var allCaches = [
   staticCacheName,
@@ -11,7 +11,8 @@ var allCaches = [
       return cache.addAll([
         '/',
         '/style.css',
-        '/script.js'
+        '/script.js',
+        '/db.js'
       ]);
     })
   );
