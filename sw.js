@@ -9,10 +9,10 @@ var allCaches = [
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
-        '/',
-        'style.css',
-        'script.js',
-        'db.js'
+        '/convert-currency/',
+        '/convert-currency/style.css',
+        '/convert-currency/script.js',
+        '/convert-currency/db.js'
       ]);
     })
   );
