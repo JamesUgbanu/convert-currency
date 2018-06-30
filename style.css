@@ -1,0 +1,22 @@
+body{
+  margin: 30px;
+}
+
+.box {
+  border: 1px solid grey;
+}
+
+header {
+  background-color: green;
+  color: #fff;
+}
+h1 {
+  font-size: 25px;
+}
+.col-centered{
+  float: none;
+  margin: 2em auto;
+}
+footer {
+  margin-top: 50px;
+}
