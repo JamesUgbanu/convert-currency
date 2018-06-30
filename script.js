@@ -1,4 +1,4 @@
-
+//open connection and create indexedDB databse
  var dbPromise = idb.open('currencyConverter', 2, function(upgradeDb) {
    switch(upgradeDb.oldVersion) {
     case 0:
@@ -8,16 +8,15 @@
    case 1:
    upgradeDb.createObjectStore('rate');
    //exchangeRate.createIndex('from-to', 'query');
-       
-                              }
+      }
   });
 
 
-
+//Service worker registration
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('/sw.js')
-    .then(function(registration) {
+    .then((registration) => {
         var serviceWorker;
         if (registration.installing) {
             serviceWorker = trackInstalling(registration.installing);
@@ -51,13 +50,13 @@ if ('serviceWorker' in navigator) {
             refreshing = true;
           });
     
-    }).catch(function(err) {
+    }).catch((err) => {
         console.log('Service Worker Error', err);
     });
   
   
 }
-
+//Tracking Service working installation
 function trackInstalling(worker) {
   worker.addEventListener('statechange', function() {
     if (worker.state == 'installed') {
@@ -65,7 +64,7 @@ function trackInstalling(worker) {
     }
   });
 }
-
+//Check if service worker update is ready
 function updateReady(worker) {
 
   if (confirm("New version available")) {
@@ -80,17 +79,14 @@ function convertCurrency() {
   let toCurrency = encodeURIComponent($('#to').val());
   let fromAmount = $('#fromAmount').val();
   let query = fromCurrency + '_' + toCurrency;
-   //let toAmount =  ;
-  /** Looping through currency **/
-  let currenciesUrl  = 'https://free.currencyconverterapi.com/api/v5/currencies';
   
-
+  let currenciesUrl  = 'https://free.currencyconverterapi.com/api/v5/currencies';
   let url = 'https://free.currencyconverterapi.com/api/v5/convert?q='
             + query + '&compact=ultra&apiKey=';
   
   
   
-       dbPromise.then(function(db) {
+       dbPromise.then((db) => {
          
                      var tx = db.transaction('rate');
                      var getCurrency = tx.objectStore('rate');
@@ -111,12 +107,12 @@ function convertCurrency() {
                               success: (data) => {
                                 
                                let val = data[query];
-                                 dbPromise.then(function(db) {
+                                 dbPromise.then((db) => {
                                var tx = db.transaction('rate', 'readwrite');
                                var store = tx.objectStore('rate');
                                    store.put(val, query);
                                   
-                            store.openCursor(null, "prev").then(function(cursor) {
+                            store.openCursor(null, "prev").then((cursor) => {
                                   return cursor.advance(15);
                                 }).then(function deleteRest(cursor) {
                                   if (!cursor) return;
@@ -135,7 +131,7 @@ function convertCurrency() {
                              }
        
                          })
-                      },  error: function(xhr,status,error) {
+                      },  error: (xhr,status,error) => {
                                  console.log(status)
                                    $('#toAmount').val("");
 
@@ -153,10 +149,10 @@ function convertCurrency() {
   
     
       
-          dbPromise.then(function(db) {
+          dbPromise.then((db) => {
                var tx = db.transaction('currencies');
                var getCurrency = tx.objectStore('currencies');
-                  getCurrency.getAll().then(function(currencies) {
+                  getCurrency.getAll().then((currencies) => {
                     //console.log(currencies);
                     if(currencies.length == 0) {
                       
@@ -166,17 +162,15 @@ function convertCurrency() {
                             success: (results) => {
                              var result = results.results;
 
-                              dbPromise.then(function(db) {
+                              dbPromise.then((db) => {
                              var tx = db.transaction('currencies', 'readwrite');
                              var store = tx.objectStore('currencies');
-
+                              /** Looping through currencies **/
                                 for (const props in result) {
 
                                     store.put(result[props]);
 
-                              }
-                                
-                   
+                                }
 
                             });
 
@@ -187,11 +181,10 @@ function convertCurrency() {
                       
                     }
                     var sortedCurrencies = currencies.filter(currency => {
-                      
-                      
+                    
                               return  currency.id !== "USD";
                     }).
-                    sort(function (a, b) {
+                    sort((a, b) => {
                 
                       return a.currencyName.localeCompare(b.currencyName);
                     });
@@ -206,7 +199,7 @@ function convertCurrency() {
 
                         } else if(toCurrency === currency.id) {
 
-                         $("#toSymbol").html(currency.currencySymbol);
+                         currency.hasOwnProperty("currencySymbol") ? $("#toSymbol").html(currency.currencySymbol) : $("#toSymbol").html("");
                         }
 
                        $(".currency").append(html); 
@@ -214,7 +207,5 @@ function convertCurrency() {
                   }) 
           });
   
-  
-             
 }
 
