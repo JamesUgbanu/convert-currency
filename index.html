@@ -34,14 +34,13 @@
      <label class="col-md-2 col-sm-2 col-md-offset-1 control-label">From:</label>
    <div class="col-md-3 col-sm-3">
      <div class="input-group">
-  <span class="input-group-addon" id="fromSymbol"></span>
+  <span class="input-group-addon" id="fromSymbol">$</span>
       <input id="fromAmount" type="text" class="form-control" onkeyup="convertCurrency();" value="1">
     </div>
     </div>
         <div class="col-sm-4 col-sm-4">
         <select class="form-control currency" id="from" onchange="convertCurrency();">
            <option value="USD">US Dollar(USD)</option>
-           <option value="NGN">Nigerian Naira(NGN)</option>
         </select>  
         </div>
 </div> <br>    
@@ -49,14 +48,13 @@
      <label class="col-md-2 col-md-offset-1 control-label">To:</label>
    <div class="col-md-3">
      <div class="input-group">
-  <span class="input-group-addon" id="toSymbol"></span>
-      <input id="toAmount" type="text" class="form-control" aria-label="..." disabled>
+  <span class="input-group-addon" id="toSymbol">$</span>
+      <input id="toAmount" type="text" class="form-control" disabled>
     </div>
     </div>
         <div class="col-sm-4">
         <select class="form-control currency" id="to" onchange="convertCurrency();">
-          <option value="NGN">Nigerian Naira(NGN)</option>
-          <option value="USD">US Dollar(USD)</option>
+           <option value="USD">US Dollar(USD)</option>
         </select>             
         </div>
 </div>    
@@ -68,24 +66,11 @@
   </footer>
 </div>
 
-<!--         <div class="form-group">
-          <label class="sr-only" for="exampleInputAmount">Amount I Want</label>
-          <div class="input-group">
-            <select id="rate-symbols" class="form-control"></select> 
-            <input type="text" class="form-control" id="outputAmount" placeholder="Conversion Amount">
-          </div>
-        </div> -->
-<!--         <button type="submit" class="btn btn-primary">Transfer cash</button> -->
- 
+
     <!-- import the webpage's client-side javascript file -->
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/script.js" async></script>
-
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
-    <script type="text/javascript" src="https://button.glitch.me/button.js"></script>
 
   </body>
 </html>
