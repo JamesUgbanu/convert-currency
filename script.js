@@ -15,7 +15,7 @@
 //Service worker registration
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
-    .register('/')
+    .register('/sw.js', {scope: './'}
     .then((registration) => {
         var serviceWorker;
         if (registration.installing) {
