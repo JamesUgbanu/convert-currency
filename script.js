@@ -15,7 +15,7 @@
 //Service worker registration
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
-    .register('sw.js')
+    .register('techneplus.github.io/convert-currency/sw.js')
     .then((registration) => {
         var serviceWorker;
         if (registration.installing) {
