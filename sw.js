@@ -10,9 +10,9 @@ var allCaches = [
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         '/',
-        'style.css',
-        'script.js',
-        'db.js'
+        '/style.css',
+        '/script.js',
+        '/db.js'
       ]);
     })
   );
