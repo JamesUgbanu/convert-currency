@@ -154,8 +154,7 @@ function convertCurrency() {
                var tx = db.transaction('currencies');
                var getCurrency = tx.objectStore('currencies');
                   getCurrency.getAll().then((currencies) => {
-                    console.log(currencies.length)
-                    
+                  
                     if(currencies.length < 1) {
                       
                          fetch(currenciesUrl).then(response => response.json())
