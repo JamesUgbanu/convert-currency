@@ -156,7 +156,7 @@ function convertCurrency() {
                   getCurrency.getAll().then((currencies) => {
                     
                     
-                    if(currencies.length == 0) {
+                    if(currencies.length < 1) {
                       
                          fetch(currenciesUrl).then(response => response.json())
                       .then(data => {
