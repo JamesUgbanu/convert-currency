@@ -99,14 +99,16 @@ function convertCurrency() {
 
                                 }
                         
-                        else if(val  === undefined){
                           
-                           $.ajax({
-                              url: url,
-                              type:"GET",
-                              success: (data) => {
-                                
-                               let val = data[query];
+                        
+                        else if(val  === undefined){
+                              
+                                  fetch(url).then(response => { return response.json() })
+                              .then(myJSON => {
+                                  
+                                  console.log(myJSON[query])
+                                       
+                               let val = myJSON[query];
                                  dbPromise.then((db) => {
                                var tx = db.transaction('rate', 'readwrite');
                                var store = tx.objectStore('rate');
@@ -131,18 +133,17 @@ function convertCurrency() {
                              }
        
                          })
-                      },  error: (xhr,status,error) => {
-                                 console.log(status)
-                                   $('#toAmount').val("");
-
-                                }, dataType: 'jsonp',
-                        });  
-                        
-                                         } else {
+                              })
+                              .catch(error => console.error(error));
+                         
+                          
+                            } else {
                                   var err = new Error("Value not found for " + query);
 
                               }
-                         
+                        
+                        
+                          
                       });
 
                     });
@@ -153,14 +154,14 @@ function convertCurrency() {
                var tx = db.transaction('currencies');
                var getCurrency = tx.objectStore('currencies');
                   getCurrency.getAll().then((currencies) => {
-                    //console.log(currencies);
+                    
+                    
                     if(currencies.length == 0) {
                       
-                      $.ajax({
-                            url: currenciesUrl,
-                            type:"GET",
-                            success: (results) => {
-                             var result = results.results;
+                         fetch(currenciesUrl).then(response => response.json())
+                      .then(data => {
+                         
+                           var result = data.results;
 
                               dbPromise.then((db) => {
                              var tx = db.transaction('currencies', 'readwrite');
@@ -173,11 +174,9 @@ function convertCurrency() {
                                 }
 
                             });
-
-                            //},error: (xhr,status,error) => {console.log(status)
-                            }, 
-                            dataType: 'jsonp',
-                      });  
+                       
+                       })
+                   
                       
                     }
                     var sortedCurrencies = currencies.filter(currency => {
